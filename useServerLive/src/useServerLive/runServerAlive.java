@@ -41,7 +41,7 @@ import javax.net.ssl.X509TrustManager;
  */
 public class runServerAlive extends Thread {
 	saveLog sl;
-	int timeOut = 30;//소켓 타임아웃 초 
+	//int timeOut = 30;//소켓 타임아웃 초 기본값으로 가져감.
 	public runServerAlive(){
 		super();
 	}
@@ -79,18 +79,18 @@ public class runServerAlive extends Thread {
         // 요청 방식 설정 ( GET or POST or .. 별도로 설정하지않으면 GET 방식 )
         conn.setRequestMethod("GET"); 
         // 연결 타임아웃 설정 
-        conn.setConnectTimeout(timeOut*1000); 
+        conn.setConnectTimeout(slo1.getTimeOut()*1000); 
         // 읽기 타임아웃 설정 
         //conn.setReadTimeout(3000); // 3초 
 		  conn.setInstanceFollowRedirects(true);
-
+	    sPageTm = System.currentTimeMillis();
+			ePageTm = System.currentTimeMillis();
+			conn.connect();
 		  slo1.setResponseCode(conn.getResponseCode());
 		    //slo1.setFileSize(conn.getContentLengthLong());
 		    slo1.setStrEncode(conn.getContentEncoding());
 		    slo1.setHeaderSize(conn.getHeaderFields().toString().getBytes().length);
 
-        sPageTm = System.currentTimeMillis();
-				ePageTm = System.currentTimeMillis();
         StringBuffer sb =  new StringBuffer();
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         String line = null;  
@@ -162,7 +162,8 @@ public class runServerAlive extends Thread {
 		// Get HTTPS URL connection  
 		  URL url = new URL("https://"+slo1.getSvcIp()+":"+slo1.getSvcPort()+slo1.getChkPath());
 		  // System.out.println("https://"+slo.getSvcIp()+":"+slo.getSvcPort()+slo.getChkPath());
-		  HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();  
+		  HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
+		  conn.setConnectTimeout(slo1.getTimeOut()*1000); 
 /*		    
 		  // Set Hostname verification  
 		  conn.setHostnameVerifier(new HostnameVerifier() {  
@@ -184,8 +185,8 @@ public class runServerAlive extends Thread {
 	    sPageTm = System.currentTimeMillis();
 			ePageTm = System.currentTimeMillis();
 		  // Connect to host  
-		  conn.connect();  
 		  conn.setInstanceFollowRedirects(true);
+		  conn.connect();  
 
 		  slo1.setResponseCode(conn.getResponseCode());
 	    //slo1.setFileSize(conn.getContentLengthLong());
@@ -237,7 +238,7 @@ public class runServerAlive extends Thread {
 		try {
 			//socket.setSoTimeout(timeout);			/* InputStream에서 데이터읽을때의 timeout */
 			// System.out.println(slo.getSvcIp()+":"+slo.getSvcPort());
-			socket.connect(socketAddress, (timeOut*1000));	/* socket연결 자체에대한 timeout */
+			socket.connect(socketAddress, (slo.getTimeOut()*1000));	/* socket연결 자체에대한 timeout */
 			slo.setConectStr("done");
 			sl.saveAccess(slo, "");
 		} catch (SocketException e) {

@@ -23,6 +23,7 @@ public class svcListOne {
 	private String chkMsg;//체크할 문자열
 	private String logId;
 	private String logPs;
+	private int timeOut=30;//타임아웃 대기 초
 	//로그기록에 사용하는 것들
 	private String conectStr;//연결 완료 여부 done, false
 	private int responseCode;//응답 코드
@@ -48,6 +49,7 @@ public class svcListOne {
 		this.workTime = 0;
 		this.strEncode="";
 		this.pageChek=false;
+		this.timeOut = 30;
 	}
 	/**
 	 * 환경을 변경
@@ -201,5 +203,11 @@ public class svcListOne {
 	}
 	public void setOldlogfile(String oldlogfile) {
 		this.oldlogfile = oldlogfile;
+	}
+	public int getTimeOut() {
+		return timeOut;
+	}
+	public void setTimeOut(int timeOut) {
+		this.timeOut = timeOut;
 	}	
 }

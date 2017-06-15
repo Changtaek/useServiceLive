@@ -78,6 +78,13 @@ public class useServerAlive extends Thread {
 				    	  one = new runServerAlive();
 				    	  one.sl = this.sl;
 				    	  runSvcList.put(keyName,one);
+				    	  		//처음 실행할때는 모두 첫 실행인데 너무 빨리 많은 포트를 열기 때문에 하나의 포트를 열면 잠시 대기 시켰다가 다음 포트를 열수 있도록 대시를 시킨다.
+								try{
+									Thread.sleep(100);//1초에 5개 정도만 시작을 할수 있도록 조정해 둔다.
+								}catch(InterruptedException e){
+									
+								}
+				    	  		
 				      }else{
 				    	  one = (runServerAlive) runSvcList.get(keyName);
 				      		}
@@ -197,12 +204,17 @@ public class useServerAlive extends Thread {
 	private boolean setSvcListOne(boolean start,String line){
 		String[] ss = line.split(":");
 		//반드시 첫 번필드는 0.1 둘중하나여야한다.
-		if(!("0".equals(ss[0]) || "1".equals(ss[0]))){
+		if(!("0".equals(ss[0]) || isStr2Num(ss[0]) > 0)){
 			sl.saveListSetup(start, false, line);
 			return false;
 		}else{
 			svcListOne one = new svcListOne();
-			one.setSvcRun(Integer.parseInt(ss[0]));//0. 서비스 동작여부를 알려줌 1동작 0 멈춤
+			int timeOuts = isStr2Num(ss[0]);
+			if(timeOuts > 0) one.setSvcRun(1);
+			else one.setSvcRun(0);//0. 서비스 동작여부를 알려줌 1동작 0 멈춤
+
+			if(timeOuts > 1) one.setTimeOut(timeOuts);
+
 			//검증 1. 서비스 가능 종류 [http,https,telnet,ftp,ssh,tcp] tcp는 포트만 확인함.
 			if(!svcTypes.contains(ss[1].toLowerCase())){
 				sl.saveListSetup(start, false, line);
@@ -240,6 +252,18 @@ public class useServerAlive extends Thread {
 			sl.saveListSetup(start, true, line);
 			return true;
 		}
+	}
+	/**
+	 * 주어진 문자열이 숫자형인지 확인해서 숫자형이면 그 수를 아니면 0 0도 0을 반환한다.
+	 * @param n 문자열형 숫자
+	 * @return 0 또는 주어진 수
+	 */
+	private int isStr2Num(String n){
+		int result=0;
+			try{
+				 result = Integer.parseInt(n);
+			}catch(Exception e){}
+		return result;
 	}
 	
 }
