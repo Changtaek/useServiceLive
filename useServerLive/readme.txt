@@ -33,8 +33,8 @@ svclist.conf 은 점검대상의 서버목록을 기록한 설정파일로 진�
 # * 8. 접근시 로그인이 필요한경우 패스워드{telnet,ftp,ssh} 추후 사용예정
 ## 0/1:telnet[ssh|ftp|http|https|ssh|tcp]:ip:port:2:::::
 #아래 설명
-# [1]사용중,[https] 웹ssl,[www.google.co.kr] 도메인,[443] 포트 80과 443등 알려진 포트도 반드시 기입, [1] 1 분간격으로 점검, [/tour/index.html#/tour/mapservice?1] 이라는 url경로임, [Bigdata Intelligence Platform version 1.0]라는 문구가 페이지 내에 있으면 정상  
-1:https:www.google.co.kr:443:1:/tour/index.html#/tour/mapservice?1:Bigdata Intelligence Platform version 1.0
+# [1]사용중,[https] 웹ssl,[www.google.co.kr] 도메인,[443] 포트 80과 443등 알려진 포트도 반드시 기입, [1] 1 분간격으로 점검, [/tour/index.html#/tour/mapservice?1] 이라는 url경로임, [Google Inc]라는 문구가 페이지 내에 있으면 정상  
+1:https:www.google.co.kr:443:1:/tour/index.html#/tour/mapservice?1:Google Inc
 :
 로그 파일의 종류는 
 access.log => 서버 점검상 이상이 없으면 점검할때마다 추가한다.
